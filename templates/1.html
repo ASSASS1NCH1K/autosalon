@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автосалон АвтоПрайм</title>
+<link rel="stylesheet" href="1.css">
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">🚗 АвтоПрайм</div>
+    <div class="phone">📞 +7 (3462) 55-88-99</div>
+</div>
+
+<div class="nav">
+    <a href="#">Главная</a>
+    <a href="#">Каталог</a>
+    <a href="#">Услуги</a>
+    <a href="#">О нас</a>
+    <a href="#">Контакты</a>
+</div>
+
+<div class="banner">
+    <h1>Автомобили с гарантией до 3 лет</h1>
+    <p>Кредит от 0% • Трейд-ин • Тест-драйв</p>
+    <button class="btn" onclick="alert('Заявка отправлена! Мы перезвоним.')">Записаться на тест-драйв</button>
+</div>
+
+<div class="filters">
+    <div class="filter-group">
+        <label>Марка</label>
+        <select id="brandFilter">
+            <option value="all">Все</option>
+            <option value="BMW">BMW</option>
+            <option value="Mercedes">Mercedes</option>
+            <option value="Audi">Audi</option>
+            <option value="Kia">Kia</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Цена до (₽)</label>
+        <input type="number" id="priceFilter" placeholder="Любая">
+    </div>
+    <div class="filter-group">
+        <label>Топливо</label>
+        <select id="fuelFilter">
+            <option value="all">Любое</option>
+            <option value="Бензин">Бензин</option>
+            <option value="Дизель">Дизель</option>
+            <option value="Электро">Электро</option>
+        </select>
+    </div>
+    <div>
+        <button class="btn" id="searchBtn">🔍 Найти</button>
+    </div>
+</div>
+
+<div id="carsContainer" class="cars-grid"></div>
+
+<div class="features">
+    <div class="feature">✅ Гарантия до 3 лет</div>
+    <div class="feature">🏆 Собственный сервис</div>
+    <div class="feature">💰 Кредит и лизинг</div>
+    <div class="feature">🔄 Трейд-ин</div>
+</div>
+
+<div class="footer">
+    <p>© 2026 АвтоПрайм. Сургут, ул. Нефтяников, 12</p>
+    <p>📞 +7 (3462) 55-88-99 | ✉️ info@avtoprime.ru</p>
+</div>
+
+<script>
+    const cars = [
+        { id: 1, name: "BMW X5", year: 2021, price: 5600000, fuel: "Дизель", image: "images/X5.jpg" },
+        { id: 2, name: "Mercedes E-Class", year: 2022, price: 5100000, fuel: "Бензин", image: "images/e class.jpg" },
+        { id: 3, name: "Audi Q7", year: 2020, price: 4900000, fuel: "Бензин", image: "images/Q7.jpg" },
+        { id: 4, name: "Kia Sportage", year: 2023, price: 2850000, fuel: "Бензин", image: "images/sportage.jpeg" },
+        { id: 5, name: "BMW i4", year: 2023, price: 6200000, fuel: "Электро", image: "images/BMW-i4.jpg" },
+        { id: 6, name: "Mercedes EQC", year: 2022, price: 5900000, fuel: "Электро", image: "images/EQC.jpg" },
+        { id: 7, name: "Audi e-tron", year: 2022, price: 6100000, fuel: "Электро", image: "images/E-TRON.jpg" }
+    ];
+
+    function showCars(filteredCars) {
+        const container = document.getElementById('carsContainer');
+        
+        if (filteredCars.length === 0) {
+            container.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px;">Автомобили не найдены</div>';
+            return;
+        }
+
+        let html = '';
+        for (let car of filteredCars) {
+            html += `
+                <div class="car-card">
+                    <img src="${car.image}" alt="${car.name}" onerror="this.src='https://via.placeholder.com/300x180/cccccc/666666?text=Фото+не+загружено'">
+                    <div class="car-info">
+                        <div class="car-name">${car.name}</div>
+                        <div class="car-year">${car.year} г. • ${car.fuel}</div>
+                        <div class="car-price">${car.price.toLocaleString('ru-RU')} ₽</div>
+                        <button class="car-btn" onclick="alert('Запись на тест-драйв: ${car.name}')">Записаться</button>
+                    </div>
+                </div>
+            `;
+        }
+        container.innerHTML = html;
+    }
+
+    function filterCars() {
+        const brand = document.getElementById('brandFilter').value;
+        const maxPrice = parseInt(document.getElementById('priceFilter').value) || 999999999;
+        const fuel = document.getElementById('fuelFilter').value;
+
+        const filtered = cars.filter(car => {
+            if (brand !== 'all' && !car.name.includes(brand)) return false;
+            if (car.price > maxPrice) return false;
+            if (fuel !== 'all' && car.fuel !== fuel) return false;
+            return true;
+        });
+
+        showCars(filtered);
+    }
+
+    showCars(cars);
+
+    document.getElementById('searchBtn').addEventListener('click', filterCars);
+</script>
+
+</body>
+</html>
